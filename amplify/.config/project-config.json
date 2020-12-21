@@ -1,7 +1,7 @@
 {
   "projectName": "w4madataReact",
   "version": "3.0",
-  "frontend": "javascript",
+  "frontend": "react",
   "javascript": {
     "framework": "react",
     "config": {
