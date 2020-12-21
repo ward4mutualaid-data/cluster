@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "w4madatareact94c72234": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
