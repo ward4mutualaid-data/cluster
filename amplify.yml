@@ -1,0 +1,29 @@
+# NOTE: changing this file has no effect on the build. You need to make changes
+#  in Amplify > {My App} > Build Settings.
+#  Just keeping this file here just as reference
+version: 1
+backend:
+  phases:
+    # IMPORTANT - Please verify your build commands
+    build:
+      commands:
+        - '# Execute Amplify CLI with the helper script'
+        - amplifyPush --simple
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+        - echo "=== FINISHED BUILDING ==="
+        - ls build/
+  artifacts:
+    # IMPORTANT - Please verify your build output directory
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+        - node_modules/**/*
