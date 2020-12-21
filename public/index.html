@@ -15,12 +15,6 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css" rel="stylesheet" />
-    <style>
-    	body { margin: 0; padding: 0; }
-    	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-    </style>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -34,22 +28,10 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="map"></div>
-    <script>
-    	// TO MAKE THE MAP APPEAR YOU MUST
-    	// ADD YOUR ACCESS TOKEN FROM
-    	// https://account.mapbox.com
-    	mapboxgl.accessToken = 'pk.eyJ1Ijoid2FyZDRtdXR1YWxhaWQtZGF0YSIsImEiOiJja2ltNDFhbzIwNm55Mnp0aHlpODdjYTZlIn0.FZJAKSl2apYg6a2CfIWYMQ';
-        var map = new mapboxgl.Map({
-            container: 'map', // container id
-            style: 'mapbox://styles/mapbox/streets-v11', // style URL
-            center: [-77.0280245,38.9553828], // starting position [lng, lat]
-            zoom: 13 // starting zoom
-        });
-    </script>
     <div id="root"></div>
     <!--
-    DO NOT EDIT INSIDE THE root DIV! The react App gets injected here
+    DO NOT EDIT INSIDE THE root DIV! The react App gets injected here.
+    Anything you put here will not appear behind the login screen.
 
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

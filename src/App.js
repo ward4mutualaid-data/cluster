@@ -11,7 +11,10 @@ function App() {
   return (
     <div className="App">
      <AmplifySignOut />
-      
+      <h1>You've successfuly logged in! </h1>
+      <p>There is nothing here yet but stay tuned ...</p>
+      <img></img>
+      <img src="welp_its_cats.gif" alt="cats" />
     </div>
   );
 }
