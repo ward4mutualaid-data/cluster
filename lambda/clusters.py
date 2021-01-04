@@ -6,15 +6,22 @@ from dataclasses import dataclass
 from math import sqrt
 from random import uniform
 from statistics import mean, pstdev
-from typing import Generic, Iterable, Iterator, List, Sequence, Tuple, TypeVar
+from typing import (
+    Any,
+    Dict,
+    Generic,
+    Iterable,
+    Iterator,
+    List,
+    Sequence,
+    Tuple,
+    TypeVar,
+)
 
 
 def lambda_handler(event, context):
-    print("value1 = " + event["key1"])
-    print("value2 = " + event["key2"])
-    print("value3 = " + event["key3"])
-
-    points = [DataPoint(point) for point in json.loads(event["coords"])]
+    print("FULL REQUEST: ", event)
+    points = [DataPoint(**point) for point in json.loads(event["body"])]
     max_size = 5
     num_points = len(points)
     if num_points % max_size == 0:
@@ -25,9 +32,19 @@ def lambda_handler(event, context):
     kmeans: KMeans[DataPoint] = KMeans(num_clusters, points, max_size=max_size)
     clusters: List[Cluster] = kmeans.run()
     flat_clusters = []
-    for c in clusters:
-        flat_clusters.append([p._originals for p in c.points])
-    return json.dumps(flat_clusters)
+    for idx, c in enumerate(clusters, 1):
+        for p in c.points:
+            serial_p = p.serialize()
+            serial_p["cluster"] = idx
+            flat_clusters.append(serial_p)
+    print("RESPONSE BODY: ", flat_clusters)
+    return {
+        "statusCode": "200",
+        "body": json.dumps(flat_clusters),
+        "headers": {
+            "Content-Type": "application/json",
+        },
+    }
 
 
 def zscores(original: Sequence[float]) -> List[float]:
@@ -39,9 +56,10 @@ def zscores(original: Sequence[float]) -> List[float]:
 
 
 class DataPoint:
-    def __init__(self, initial: Iterable[float]) -> None:
-        self._originals: Tuple[float, ...] = tuple(initial)
-        self.dimensions: Tuple[float, ...] = tuple(initial)
+    def __init__(self, coords: Iterable[float], _id: Any = None) -> None:
+        self._id: Any = _id
+        self._originals: Tuple[float, ...] = tuple(coords)
+        self.dimensions: Tuple[float, ...] = tuple(coords)
 
     @property
     def num_dimensions(self) -> int:
@@ -51,6 +69,14 @@ class DataPoint:
         combined: Iterator[Tuple[float, float]] = zip(self.dimensions, other.dimensions)
         differences: List[float] = [(x - y) ** 2 for x, y in combined]
         return sqrt(sum(differences))
+
+    def serialize(self) -> Dict:
+        serialized: Dict = {
+            "coords": self._originals,
+        }
+        if self._id is not None:
+            serialized["_id"] = self._id
+        return serialized
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataPoint):
@@ -115,7 +141,7 @@ class KMeans(Generic[Point]):
     # Find the closest cluster centroid to each point and assign the point to that cluster
     def _assign_clusters(self) -> None:
         # [distance to nearest centroid, DataPoint, list of centroids ordered by nearness]
-        points_with_nearness: List[Tuple[float, Datapoint, List[DataPoint]]] = []
+        points_with_nearness: List[Tuple[float, DataPoint, List[DataPoint]]] = []
         for point in self._points:
             centroids_and_distance: List[Tuple[float, DataPoint]] = [
                 (point.distance(cen), cen) for cen in self._centroids
