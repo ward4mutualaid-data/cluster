@@ -1,0 +1,4 @@
+recId|searchText|country
+0001|3830 Georgia Ave NW Washington DC|USA
+0002|4200 Kansas Ave NW Washington DC|USA
+
