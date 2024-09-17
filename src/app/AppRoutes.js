@@ -8,7 +8,8 @@ const Dashboard = lazy(() => import('./dashboard/Dashboard'));
 const Buttons = lazy(() => import('./basic-ui/Buttons'));
 const Dropdowns = lazy(() => import('./basic-ui/Dropdowns'));
 
-const BasicElements = lazy(() => import('./form-elements/BasicElements'));
+const NewOrderForm = lazy(() => import('./form-elements/NewOrderForm'));
+const ViewEditOrderForm = lazy(() => import('./form-elements/ViewEditOrderForm'));
 
 const BasicTable = lazy(() => import('./tables/BasicTable'));
 
@@ -33,7 +34,9 @@ class AppRoutes extends Component {
           <Route path="/basic-ui/buttons" component={ Buttons } />
           <Route path="/basic-ui/dropdowns" component={ Dropdowns } />
 
-          <Route path="/form-Elements/basic-elements" component={ BasicElements } />
+          {/* TODO: these should all look like /w4madata/new-order-form */}
+          <Route path="/form-Elements/new-order-form" component={ NewOrderForm } />
+          <Route path="/form-Elements/view-edit-order-form/:order_id" component={ ViewEditOrderForm } />
 
           <Route path="/tables/basic-table" component={ BasicTable } />
 

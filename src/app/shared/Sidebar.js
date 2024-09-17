@@ -116,7 +116,8 @@ class Sidebar extends Component {
             </div>
             <Collapse in={ this.state.formElementsMenuOpen }>
               <ul className="nav flex-column sub-menu">
-                <li className="nav-item"> <Link className={ this.isPathActive('/form-elements/basic-elements') ? 'nav-link active' : 'nav-link' } to="/form-elements/basic-elements"><Trans>Basic Elements</Trans></Link></li>
+                <li className="nav-item"> <Link className={ this.isPathActive('/form-elements/new-order-form') ? 'nav-link active' : 'nav-link' } to="/form-elements/new-order-form"><Trans>New Form Input</Trans></Link></li>
+                <li className="nav-item"> <Link className={ this.isPathActive('/form-elements/view-edit-order-form') ? 'nav-link active' : 'nav-link' } to="/form-elements/view-edit-order-form"><Trans>View/Edit existing orders</Trans></Link></li>
               </ul>
             </Collapse>
           </li>

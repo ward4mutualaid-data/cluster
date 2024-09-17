@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { ProgressBar } from 'react-bootstrap';
 import awsmobile from '../../aws-exports';
 import { API } from 'aws-amplify';
 
 export class OpenOrdersTable extends Component {
   state = {
-    orders: []
+    orders: undefined,
+    finishedQuery: false
   }
 
 
@@ -23,7 +23,7 @@ export class OpenOrdersTable extends Component {
     const orders = await API
       .get(apiName, path, apiParameters)
       .then(response => {
-        console.log("retrieved response from airtable")
+        console.log("retrieved response from airtable:",response)
         return response.data.body.records
       })
       .catch(error => {
@@ -37,31 +37,36 @@ export class OpenOrdersTable extends Component {
   async componentDidMount(){
 
     await this.getAirtableOrders()
-
+    this.setState({finishedQuery: true})
   }
 
   render() {
+    // waits to render the page until we have data
+   if (!this.state.orders) {
+      return <div />
+       }
 
     const {orders} = this.state
 
     // create the table rows in a loop
     let tableRows = []
-    let order
+    let order, uid
     for (var i = 0; i < orders.length; i++) {
-        order = orders[i].fields
+        order = orders[i]
+        uid = order.id
 
         tableRows.push(
-          <tr>
-            <td>{order.order_id}</td>
-            <td>{order.first_name}</td>
-            <td>{order.delivery_date}</td>
-            <td>{order.language}</td>
+          <tr key={uid}>
+            <td>{order.fields.order_id}</td>
+            <td>{order.fields.first_name}</td>
+            <td>{order.fields.delivery_date}</td>
+            <td>{order.fields.language}</td>
             <td>
-              <i className="input-helper"></i>
+              {order.fields.is_urgent ? "YES" : ""}
             </td>
-            <td><label className="badge badge-warning">{order.order_status}</label></td>
+            <td><label className="badge badge-warning">{order.fields.order_status}</label></td>
 
-            <td><a href={"/order/" + order.order_id} target="_blank"> <i className="mdi mdi-open-in-new"></i></a></td>
+            <td><a href={"/form-Elements/view-edit-order-form/" + order.fields.order_id} target="_blank"> <i className="mdi mdi-open-in-new"></i></a></td>
           </tr>
           )
           ;
